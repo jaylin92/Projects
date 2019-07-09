@@ -60,7 +60,7 @@ summary(intern)
 # want to minimize connectivity
 #silhouette : -1 poorly clustered, 1 well clustered
 # dunn : want maximize dunn. ratio between smallest distance between obs not in same cluster to largest intra-cluster distance. 
-
+# 2 clusters for hierarchical, 2 or 3 clusters for kmeans
 
 ########### kmeans
 
