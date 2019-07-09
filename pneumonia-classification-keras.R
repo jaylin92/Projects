@@ -1,6 +1,6 @@
-suppressMessages(library(keras))
-suppressMessages(library(pROC))
-suppressMessages(library(caret))
+library(keras)
+library(pROC)
+library(caret)
 
 setwd("C:/Users/J/Documents/R Projects/Data/chest-xray-pneumonia/chest_xray/chest_xray")
 
