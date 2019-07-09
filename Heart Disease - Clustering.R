@@ -4,6 +4,7 @@ library(gridExtra)
 library(ggplot2)
 library(factoextra)
 library(NbClust)
+library(clValid)
 
 setwd("C:/Users/J/Documents/R Projects/Data/heart-disease-uci")
 heart_disease <- read.csv('heart.csv', sep=',')
@@ -50,6 +51,16 @@ fviz_nbclust(scaled, kmeans, nstart = 25,  method = "gap_stat", nboot = 50)+
   labs(subtitle = "Gap statistic method")
 
 #gap suggests 9
+
+
+clmethods <- c("hierarchical","kmeans","pam")
+intern <- clValid(scaled, nClust = 2:10, 
+                  clMethods = clmethods, validation = "internal")
+summary(intern)
+# want to minimize connectivity
+#silhouette : -1 poorly clustered, 1 well clustered
+# dunn : want maximize dunn. ratio between smallest distance between obs not in same cluster to largest intra-cluster distance. 
+
 
 ########### kmeans
 
