@@ -1,0 +1,173 @@
+---
+title: "FANG Dashboard"
+author: "Johnathan Lin"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(dygraphs)
+library(quantmod)
+library(tidyquant)
+library(xts)
+```
+
+```{r,echo=FALSE, results = 'hide'}
+
+today <- Sys.Date()
+symbols <- c("FB", "AMZN", "NFLX", "GOOGL")
+getSymbols(symbols, get = "stock.prices",from="2000-01-01")
+
+FB_adj <- FB$FB.Adjusted
+AMZN_adj <- AMZN$AMZN.Adjusted
+NFLX_adj <- NFLX$NFLX.Adjusted
+GOOGL_adj <- GOOGL$GOOGL.Adjusted
+```
+
+Column {.tabset data-width=500}
+-----------------------------------------------------------------------
+
+### Facebook
+
+```{r echo=FALSE}
+
+
+FB_adj %>% dygraph(main="Historical Price of Facebook") %>% dyRangeSelector()
+```
+
+
+### Amazon
+
+```{r echo=FALSE}
+
+AMZN_adj %>% dygraph(main="Historical Price of Amazon") %>% dyRangeSelector()
+```
+
+### Netflix
+
+```{r echo=FALSE}
+NFLX_adj %>% dygraph(main="Historical Price of Netflix") %>% dyRangeSelector()
+```
+
+### Google
+
+```{r echo=FALSE}
+GOOGL_adj %>% dygraph(main="Historical Price of Google") %>% dyRangeSelector()
+```
+
+
+Row {.tabset data-width=500}
+-----------------------------------------------------------------------
+
+### 10 year ROI
+
+```{r echo=FALSE}
+histprice <- cbind(FB_adj,AMZN_adj,NFLX_adj,GOOGL_adj)
+year10 <- as.POSIXlt(as.Date(today))
+year10$year <- year10$year - 10
+year10 <- as.Date(year10)
+histprice_10 <- histprice[which(date(histprice)>=year10)]
+roi10 <- histprice_10
+roi10$FB.Adjusted <- roi10$FB.Adjusted / as.numeric(roi10$FB.Adjusted[1])
+roi10$AMZN.Adjusted <- roi10$AMZN.Adjusted / as.numeric(roi10$AMZN.Adjusted[1])
+roi10$NFLX.Adjusted <- roi10$NFLX.Adjusted / as.numeric(roi10$NFLX.Adjusted[1])
+roi10$GOOGL.Adjusted <- roi10$GOOGL.Adjusted / as.numeric(roi10$GOOGL.Adjusted[1])
+roi10 <- roi10*100
+roi10 %>% dygraph(main="ROI Over Past 10 Years")
+
+```
+
+### 5 year ROI
+
+```{r echo=FALSE}
+
+year5 <- as.POSIXlt(as.Date(today))
+year5$year <- year5$year - 5
+year5 <- as.Date(year5)
+histprice_year5 <- histprice[which(date(histprice)>=year5)]
+roi5 <- histprice_year5
+roi5$FB.Adjusted <- roi5$FB.Adjusted / as.numeric(roi5$FB.Adjusted[1])
+roi5$AMZN.Adjusted <- roi5$AMZN.Adjusted / as.numeric(roi5$AMZN.Adjusted[1])
+roi5$NFLX.Adjusted <- roi5$NFLX.Adjusted / as.numeric(roi5$NFLX.Adjusted[1])
+roi5$GOOGL.Adjusted <- roi5$GOOGL.Adjusted / as.numeric(roi5$GOOGL.Adjusted[1])
+roi5 <- roi5*100
+roi5 %>% dygraph(main="ROI Over Past 5 Years")
+
+```
+
+
+### 3 year ROI
+
+```{r echo=FALSE}
+
+year3 <- as.POSIXlt(as.Date(today))
+year3$year <- year3$year - 3
+year3 <- as.Date(year3)
+histprice_year3 <- histprice[which(date(histprice)>=year3)]
+roi3 <- histprice_year3
+roi3$FB.Adjusted <- roi3$FB.Adjusted / as.numeric(roi3$FB.Adjusted[1])
+roi3$AMZN.Adjusted <- roi3$AMZN.Adjusted / as.numeric(roi3$AMZN.Adjusted[1])
+roi3$NFLX.Adjusted <- roi3$NFLX.Adjusted / as.numeric(roi3$NFLX.Adjusted[1])
+roi3$GOOGL.Adjusted <- roi3$GOOGL.Adjusted / as.numeric(roi3$GOOGL.Adjusted[1])
+roi3 <- roi3*100
+roi3 %>% dygraph(main="ROI Over Past 3 Years")
+
+```
+
+### 1 year ROI
+
+```{r echo=FALSE}
+
+year1 <- as.POSIXlt(as.Date(today))
+year1$year <- year1$year - 1
+year1 <- as.Date(year1)
+histprice_year1 <- histprice[which(date(histprice)>=year1)]
+roi1 <- histprice_year1
+roi1$FB.Adjusted <- roi1$FB.Adjusted / as.numeric(roi1$FB.Adjusted[1])
+roi1$AMZN.Adjusted <- roi1$AMZN.Adjusted / as.numeric(roi1$AMZN.Adjusted[1])
+roi1$NFLX.Adjusted <- roi1$NFLX.Adjusted / as.numeric(roi1$NFLX.Adjusted[1])
+roi1$GOOGL.Adjusted <- roi1$GOOGL.Adjusted / as.numeric(roi1$GOOGL.Adjusted[1])
+roi1 <- roi1*100
+roi1 %>% dygraph(main="ROI Over Past 1 Years")
+
+```
+
+Row {.tabset data-width=500}
+-----------------------------------------------------------------------
+### Facebook
+```{r echo=FALSE}
+FB[,1:4] %>% tail(30) %>% dygraph(main="Facebook: Past 30 days price") %>%
+  dyCandlestick()
+
+
+```
+
+### Amazon
+```{r echo=FALSE}
+AMZN[,1:4] %>% tail(30) %>% dygraph(main="Amazon: Past 30 days price") %>%
+  dyCandlestick()
+
+```
+
+### Netlfix
+```{r echo=FALSE}
+NFLX[,1:4] %>% tail(30) %>% dygraph(main="Netflix: Past 30 days price") %>%
+  dyCandlestick()
+
+```
+
+
+### Google
+```{r echo=FALSE}
+GOOGL[,1:4] %>% tail(30) %>% dygraph(main="Google: Past 30 days price") %>%
+  dyCandlestick()
+
+```
