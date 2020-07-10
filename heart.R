@@ -95,7 +95,7 @@ ggplot(data = heart, aes(target)) + geom_histogram()
 
 
 ##### Logistic regression   
-# ROC https://www.youtube.com/watch?v=TZwI0XgcphM
+# ROC
 
 glm.fit = glm(target~., data = heart,family = binomial)
 # ROC CURVE
@@ -131,7 +131,7 @@ plot.roc(target, rf.model$votes[,1], percent = TRUE, col = "#4daf4a", lwd= 4, pr
 summary(rf.model)
 
 
-##### SVM https://www.youtube.com/watch?v=pS5gXENd3a4
+##### SVM 
 svm.model<- svm(target~., data= heart, type = "C-classification", kernel= "radial")
 summary(svm.model)
 plot(svm.model, data = heart, trestbps~chol)
@@ -234,8 +234,8 @@ tab
 
 
 ##### Logistic regression   
-# ROC https://www.youtube.com/watch?v=TZwI0XgcphM
-# http://r-statistics.co/Logistic-Regression-With-R.html
+# ROC 
+
 
 
 samplesize <- floor(.80*nrow(heart2))
